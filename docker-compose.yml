@@ -1,0 +1,38 @@
+version: '2.4'
+services:
+  node-exporter:
+    image: "quay.io/prometheus/node-exporter:v1.5.0"
+    container_name: "gagglemon-node-exporter"
+    restart: "unless-stopped"
+    read_only: true
+    cap_drop:
+      - ALL
+    pid: "host"
+    command:
+      - "--path.rootfs=/host"
+    volumes:
+      - "/:/host:ro,rslave"
+
+  blackbox:
+    image: "quay.io/prometheus/blackbox-exporter:v0.23.0"
+    container_name: "gagglemon-blackbox-exporter"
+    restart: "unless-stopped"
+    read_only: true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_RAW
+
+  proxy:
+    container_name: "gagglemon-proxy"
+    # v2.6.2+ has issues reading strings as arrays from yaml config, stay on 2.6.1 for now
+    image: "docker.io/traefik:v2.6.1"
+    read_only: true
+    restart: "unless-stopped"
+    cap_drop:
+      - ALL
+    volumes:
+      - "./traefik/conf/static.yml:/etc/traefik/traefik.yml:ro"
+      - "./traefik/conf/dynamic.yml:/etc/traefik/dynamic/dynamic.yml:ro"
+    ports:
+      - "8083:80"

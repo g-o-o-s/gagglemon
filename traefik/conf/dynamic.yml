@@ -1,0 +1,39 @@
+http:
+  routers:
+    node-exporter:
+      entrypoints:
+        - "web"
+      rule: "Path(`/node/metrics`)"
+      middlewares:
+        - "node-exporter-stripprefix"
+      service: "node-exporter"
+
+    blackbox-exporter:
+      entrypoints:
+        - "web"
+      rule: "Path(`/blackbox/probe`) || Path(`/blackbox/metrics`)"
+      middlewares:
+        - "blackbox-exporter-stripprefix"
+      service: "blackbox-exporter"
+
+  middlewares:
+    node-exporter-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/node"
+
+    blackbox-exporter-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/blackbox"
+
+  services:
+    node-exporter:
+      loadBalancer:
+        servers:
+          - url: "http://gagglemon-node-exporter.:9100"
+
+    blackbox-exporter:
+      loadBalancer:
+        servers:
+          - url: "http://gagglemon-blackbox-exporter.:9115"
