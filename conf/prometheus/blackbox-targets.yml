@@ -1,0 +1,35 @@
+
+###################################################################################
+# HERE ARE DEFINED ALL TARGETS THAT SHOULD BE MONITORED BY THE BLACKBOX EXPORTERS #
+# THE STRUCTURE OF THIS TEMPLATE IS DESCRIBED IN THE LINE BELOW                   #
+# <BLACKBOX_EXPORTER_IP_PORT>:_:<<MODULE>:_:<JOB/LOC>:_:<GEOHASH>:_:<TARGET_URL>  #
+###################################################################################
+- targets:
+  # collector node
+  - mccoy-pauly.goos.house:9011:_:icmp:_:mccoy-pauly:_:null:_:node01.ping.thehonk.cloud
+  - mccoy-pauly.goos.house:9011:_:icmp:_:mccoy-pauly:_:null:_:node02.ping.thehonk.cloud
+  - mccoy-pauly.goos.house:9011:_:icmp:_:mccoy-pauly:_:null:_:node03.ping.thehonk.cloud
+
+  # node01
+  - node01.ping.thehonk.cloud:9011:_:icmp:_:node01:_:null:_:9.9.9.9
+  - node01.ping.thehonk.cloud:9011:_:icmp:_:node01:_:null:_:hideo.goosga.ng
+  - node01.ping.thehonk.cloud:9011:_:icmp:_:node01:_:null:_:molly.goosga.ng
+  - node01.ping.thehonk.cloud:9011:_:icmp:_:node01:_:null:_:node01.ping.thehonk.cloud
+  - node01.ping.thehonk.cloud:9011:_:icmp:_:node01:_:null:_:node02.ping.thehonk.cloud
+  - node01.ping.thehonk.cloud:9011:_:icmp:_:node01:_:null:_:node03.ping.thehonk.cloud
+
+  # node02
+  - node02.ping.thehonk.cloud:9011:_:icmp:_:node02:_:null:_:9.9.9.9
+  - node02.ping.thehonk.cloud:9011:_:icmp:_:node02:_:null:_:hideo.goosga.ng
+  - node02.ping.thehonk.cloud:9011:_:icmp:_:node02:_:null:_:molly.goosga.ng
+  - node02.ping.thehonk.cloud:9011:_:icmp:_:node02:_:null:_:node01.ping.thehonk.cloud
+  - node02.ping.thehonk.cloud:9011:_:icmp:_:node02:_:null:_:node02.ping.thehonk.cloud
+  - node02.ping.thehonk.cloud:9011:_:icmp:_:node02:_:null:_:node03.ping.thehonk.cloud
+
+  # node03
+  - node03.ping.thehonk.cloud:9011:_:icmp:_:node03:_:null:_:9.9.9.9
+  - node03.ping.thehonk.cloud:9011:_:icmp:_:node03:_:null:_:hideo.goosga.ng
+  - node03.ping.thehonk.cloud:9011:_:icmp:_:node03:_:null:_:molly.goosga.ng
+  - node03.ping.thehonk.cloud:9011:_:icmp:_:node03:_:null:_:node01.ping.thehonk.cloud
+  - node03.ping.thehonk.cloud:9011:_:icmp:_:node03:_:null:_:node02.ping.thehonk.cloud
+  - node03.ping.thehonk.cloud:9011:_:icmp:_:node03:_:null:_:node03.ping.thehonk.cloud

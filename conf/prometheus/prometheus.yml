@@ -1,0 +1,60 @@
+global:
+  scrape_interval:     30s
+  scrape_timeout: 30s
+  evaluation_interval: 60s
+
+scrape_configs:
+  - job_name: "node-metrics"
+    metrics_path: /node/metrics
+    static_configs:
+      - targets:
+        - "mccoy-pauly.goos.house:9011"
+        - "node01.ping.thehonk.cloud:9011"
+        - "node02.ping.thehonk.cloud:9011"
+        - "node03.ping.thehonk.cloud:9011"
+
+  - job_name: "blackbox-metrics"
+    metrics_path: /blackbox/metrics
+    static_configs:
+      - targets:
+        - "mccoy-pauly.goos.house:9011"
+        - "node01.ping.thehonk.cloud:9011"
+        - "node02.ping.thehonk.cloud:9011"
+        - "node03.ping.thehonk.cloud:9011"
+
+  - job_name: 'blackbox-ping'
+    metrics_path: /blackbox/probe
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/blackbox-targets.yml
+    relabel_configs:
+      # adds "module" label in the final labelset
+      - source_labels: [__address__]
+        regex: '.*:_:(.*):_:.*:_:.*:_:.*'
+        target_label: module
+      # adds "geohash" label in the final labelset
+      - source_labels: [__address__]
+        regex: '.*:_:.*:_:.*:_:(.*):_:.*'
+        target_label: geohash
+      # rewrites "instance" label with corresponding URL
+      - source_labels: [__address__]
+        regex: '.*:_:.*:_:.*:_:.*:_:(.*)'
+        target_label: instance
+      # rewrites "job" label with corresponding location name
+      - source_labels: [__address__]
+        regex: '.*:_:.*:_:(.*):_:.*:_:.*'
+        target_label: job
+      # rewrites "viewpoint" label with corresponding location name - same as "job"
+      - source_labels: [__address__]
+        regex: '.*:_:.*:_:(.*):_:.*:_:.*'
+        target_label: viewpoint
+      # passes "module" parameter to Blackbox exporter
+      - source_labels: [module]
+        target_label: __param_module
+      # passes "target" parameter to Blackbox exporter
+      - source_labels: [instance]
+        target_label: __param_target
+      # the Blackbox exporter's real hostname:port
+      - source_labels: [__address__]
+        regex: '(.*):_:.*:_:.*:_:.*:_:.*'
+        target_label: __address__
