@@ -2,7 +2,7 @@ http:
   routers:
     node-exporter:
       entrypoints:
-        - "web"
+        - "metrics"
       rule: "Path(`/node/metrics`)"
       middlewares:
         - "node-exporter-stripprefix"
@@ -10,7 +10,7 @@ http:
 
     blackbox-exporter:
       entrypoints:
-        - "web"
+        - "metrics"
       rule: "Path(`/blackbox/probe`) || Path(`/blackbox/metrics`)"
       middlewares:
         - "blackbox-exporter-stripprefix"

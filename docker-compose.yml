@@ -6,12 +6,13 @@ services:
     restart: "unless-stopped"
     read_only: true
     cap_drop:
-      - ALL
+      - "ALL"
     pid: "host"
     command:
       - "--path.rootfs=/host"
     volumes:
-      - "/:/host:ro,rslave"
+      - "/proc:/host/proc:ro,rslave"
+      - "/sys:/host/sys:ro,rslave"
 
   blackbox:
     image: "quay.io/prometheus/blackbox-exporter:v0.23.0"
@@ -19,9 +20,9 @@ services:
     restart: "unless-stopped"
     read_only: true
     cap_drop:
-      - ALL
+      - "ALL"
     cap_add:
-      - NET_RAW
+      - "NET_RAW"
 
   proxy:
     container_name: "gagglemon-proxy"
@@ -30,9 +31,9 @@ services:
     read_only: true
     restart: "unless-stopped"
     cap_drop:
-      - ALL
+      - "ALL"
     volumes:
       - "./traefik/conf/static.yml:/etc/traefik/traefik.yml:ro"
       - "./traefik/conf/dynamic.yml:/etc/traefik/dynamic/dynamic.yml:ro"
     ports:
-      - "8083:80"
+      - "9011:9011"
