@@ -10,6 +10,8 @@ services:
     pid: "host"
     command:
       - "--path.rootfs=/host"
+      - "--collector.systemd"
+      - "--collector.processes"
     volumes:
       - "/proc:/host/proc:ro,rslave"
       - "/sys:/host/sys:ro,rslave"
