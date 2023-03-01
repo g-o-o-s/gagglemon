@@ -6,27 +6,30 @@ global:
 scrape_configs:
   - job_name: "node-metrics"
     metrics_path: /node/metrics
-    static_configs:
-      - targets:
-        - "mccoy-pauly.goos.house:9011"
-        - "node01.ping.thehonk.cloud:9011"
-        - "node02.ping.thehonk.cloud:9011"
-        - "node03.ping.thehonk.cloud:9011"
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/targets.yml
+    # pull target addresses from our target list
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: '(.*):_:.*:_:.*:_:.*:_:.*'
+        target_label: __address__
 
   - job_name: "blackbox-metrics"
     metrics_path: /blackbox/metrics
-    static_configs:
-      - targets:
-        - "mccoy-pauly.goos.house:9011"
-        - "node01.ping.thehonk.cloud:9011"
-        - "node02.ping.thehonk.cloud:9011"
-        - "node03.ping.thehonk.cloud:9011"
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/targets.yml
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: '(.*):_:.*:_:.*:_:.*:_:.*'
+        target_label: __address__
 
   - job_name: 'blackbox-ping'
     metrics_path: /blackbox/probe
     file_sd_configs:
       - files:
-          - /etc/prometheus/blackbox-targets.yml
+          - /etc/prometheus/targets.yml
     relabel_configs:
       # adds "module" label in the final labelset
       - source_labels: [__address__]

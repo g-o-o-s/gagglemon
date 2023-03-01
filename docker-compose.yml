@@ -1,29 +1,5 @@
 version: '2.4'
 services:
-  node-exporter:
-    image: "quay.io/prometheus/node-exporter:v1.5.0"
-    container_name: "gagglemon-node-exporter"
-    restart: "unless-stopped"
-    read_only: true
-    cap_drop:
-      - "ALL"
-    pid: "host"
-    command:
-      - "--path.rootfs=/host"
-    volumes:
-      - "/proc:/host/proc:ro,rslave"
-      - "/sys:/host/sys:ro,rslave"
-
-  blackbox:
-    image: "quay.io/prometheus/blackbox-exporter:v0.23.0"
-    container_name: "gagglemon-blackbox-exporter"
-    restart: "unless-stopped"
-    read_only: true
-    cap_drop:
-      - "ALL"
-    cap_add:
-      - "NET_RAW"
-
   prometheus:
     image: "quay.io/prometheus/prometheus:v2.42.0"
     container_name: "gagglemon-prometheus"
@@ -33,7 +9,7 @@ services:
       - "ALL"
     volumes:
       - "./conf/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro"
-      - "./conf/prometheus/blackbox-targets.yml:/etc/prometheus/blackbox-targets.yml:ro"
+      - "./conf/prometheus/targets.yml:/etc/prometheus/targets.yml:ro"
       - "./data/prometheus:/prometheus:rw"
     ports:
       - "9090:9090"
@@ -47,7 +23,7 @@ services:
       - "ALL"
     environment:
       - "GF_SERVER_SERVE_FROM_SUB_PATH=true"
-      - "GF_SERVER_ROOT_URL=http://mccoy-pauly.goos.house:9010/grafana/"
+      - "GF_SERVER_ROOT_URL=http://mccoy-pauly.goos.house:82/grafana/"
       - "GF_SERVER_DOMAIN=mccoy-pauly.goos.house"
     volumes:
       - "./data/grafana:/var/lib/grafana:rw"
@@ -65,4 +41,3 @@ services:
       - "./conf/traefik/dynamic.yml:/etc/traefik/dynamic/dynamic.yml:ro"
     ports:
       - "82:80"
-      - "9011:9011"

@@ -7,8 +7,6 @@ log:
 entryPoints:
   web:
     address: ":80"
-  metrics:
-    address: ":9011"
 
 # dynamic config
 providers:
